@@ -1,0 +1,5 @@
+# Site Ino-Vita AI — pre-lancement. AU DEPLOIEMENT :
+# decommenter la ligne Sitemap avec le domaine final choisi par le PDG.
+User-agent: *
+Allow: /
+# Sitemap: https://DOMAINE-A-CONFIRMER/sitemap.xml

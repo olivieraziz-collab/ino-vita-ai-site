@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AU DEPLOIEMENT : remplacer https://ino-vita.ai par le
+     domaine final (ino-vita.ai ou ai.ino-vita.com). Les pages legales sont
+     en noindex (placeholders) et ne figurent pas dans le sitemap. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://ino-vita.ai/</loc>
+    <lastmod>2026-08-30</lastmod>
+  </url>
+</urlset>
