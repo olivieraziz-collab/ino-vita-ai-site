@@ -57,6 +57,12 @@ p, li{ color:var(--ink); }
 a{ color:var(--accent-text); }
 footer.page{ border-top:1px solid var(--line); padding:24px 0 40px; color:var(--ink-2); font-size:14px; }
 mark.gap{ background:var(--accent-soft); color:var(--accent-text); font-weight:600; padding:0 4px; border-radius:4px; }
+.langlink{
+  font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:600; letter-spacing:.14em;
+  color:var(--ink-2); text-decoration:none; border:1px solid var(--line);
+  padding:5px 9px; border-radius:3px; white-space:nowrap;
+}
+.langlink:hover{ color:var(--ink); border-color:var(--accent-text); }
 </style>
 </head>
 <body>
@@ -65,6 +71,7 @@ mark.gap{ background:var(--accent-soft); color:var(--accent-text); font-weight:6
     <div class="brandline">
       <a href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g fill="none" stroke="#58D8FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M32 11 L9 53 H55 Z"/><path d="M32 11 V53 M20.5 32 L32 53 M43.5 32 L32 53"/></g><circle cx="9" cy="53" r="4" fill="#E9F2F9"/><circle cx="55" cy="53" r="4" fill="#E9F2F9"/><circle cx="32" cy="53" r="4" fill="#E9F2F9"/><circle cx="20.5" cy="32" r="3.4" fill="#58D8FF"/><circle cx="43.5" cy="32" r="3.4" fill="#58D8FF"/><circle cx="32" cy="11" r="5.6" fill="#FF6B1A"/></svg><span data-brand="name">Ino-Vita</span><span class="suffix" data-brand="suffix">AI</span></a>
       <span class="muted" style="font-weight:400; font-size:14px;">· Mentions légales</span>
+      <span style="margin-left:auto"><a class="langlink" href="/en/legal.html" lang="en" hreflang="en" aria-label="English version">EN</a></span>
     </div>
   </div>
 </header>
