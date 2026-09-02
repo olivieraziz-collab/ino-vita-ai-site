@@ -15,6 +15,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Ino-Vita AI — agents IA gouvernés pour les opérations des PME de construction">
+<link rel="canonical" href="https://ino-vita.ai/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ino-Vita AI — Agents IA gouvernés pour la construction">
+<meta name="twitter:description" content="Des agents IA font le travail entre vos outils. Vous gardez le GO. Démo interactive de 60 secondes : ino-vita.ai/demo">
+<meta name="twitter:image" content="https://ino-vita.ai/og-image.png">
 <meta property="og:url" content="https://ino-vita.ai/">
 <link rel="alternate" hreflang="fr" href="https://ino-vita.ai/">
 <link rel="alternate" hreflang="en" href="https://ino-vita.ai/en/">
@@ -352,6 +357,16 @@ h3{ font-size:19px; font-weight:600; letter-spacing:.03em; margin-bottom:10px; l
 .sim-result.nogo{ background:var(--bg2); border:1px solid var(--line); }
 .sim-result .mono{ font-size:11.5px; display:block; margin-top:8px; color:var(--faint); }
 .sim-replay{ align-self:flex-start; }
+.btn:disabled{ opacity:.42; cursor:default; pointer-events:none; filter:saturate(.45); }
+.sim-legend{ margin-top:18px; border:1px solid var(--line-soft); border-radius:6px; background:var(--panel2); padding:14px 16px; }
+.sim-legend .lh{ font-family:var(--f-mono); font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+.sim-legend p{ margin:0 0 10px; font-size:13.5px; color:var(--dim); line-height:1.55; }
+.sim-legend ol{ margin:0; padding-left:18px; font-size:13px; color:var(--faint); line-height:1.7; }
+.sim-legend ol strong{ color:var(--dim); font-weight:600; }
+.sim-cta{ margin:2px 0 0; font-size:13.5px; color:var(--dim); }
+.sim-cta a{ color:var(--or); font-weight:600; text-decoration:none; border-bottom:1px solid rgba(255,107,26,.4); }
+.sim-cta a:hover{ border-bottom-color:var(--or); }
+.sim-result:focus{ outline:2px solid var(--cy); outline-offset:3px; }
 .sim-moral{
   margin-top:30px; text-align:center;
   font-family:var(--f-disp); font-size:clamp(19px, 2.4vw, 26px); font-weight:700;
@@ -599,7 +614,7 @@ html.js .rv.in{ opacity:1; transform:none; }
     <nav class="links" aria-label="Navigation principale">
       <a href="#probleme">Le problème</a>
       <a href="#systeme">Fonctionnement</a>
-      <a href="#console">Essayez le gate</a>
+      <a href="#console">Démo (60 s)</a>
       <a href="#preuves">Preuves</a>
       <a href="#offres">Offres</a>
       <a href="#faq">FAQ</a>
@@ -615,7 +630,7 @@ html.js .rv.in{ opacity:1; transform:none; }
 <nav id="mobileMenu" aria-label="Menu mobile">
   <a href="#probleme">Le problème</a>
   <a href="#systeme">Fonctionnement</a>
-  <a href="#console">Essayez le gate</a>
+  <a href="#console">Démo (60 s)</a>
   <a href="#preuves">Preuves</a>
   <a href="#deploiement">Déploiement</a>
   <a href="#offres">Offres</a>
@@ -634,7 +649,7 @@ html.js .rv.in{ opacity:1; transform:none; }
     <p class="lede">Ino-Vita AI opère les flux entre vos courriels, votre comptabilité, vos plans et votre chantier. Chaque action cite ses sources, est validée par des modèles indépendants — et rien d'externe ne part sans approbation humaine. Construit par un entrepreneur général de Montréal, qui l'utilise chaque jour sur ses propres opérations.</p>
     <div class="hero-ctas">
       <a class="btn btn-go btn-xl" href="mailto:sarah@ino-vita.com?subject=Appel%20exploratoire%20%E2%80%94%20Ino-Vita%20AI">Réserver un appel de 30 min</a>
-      <a class="btn btn-line" href="#systeme">Voir comment ça marche</a>
+      <a class="btn btn-line" href="#console"><span aria-hidden="true">▶</span> Voir la démo (60 s)</a>
     </div>
     <p class="hero-note"><span class="dot"></span> Chaque démo est un système qui tourne — pas des diapositives. &nbsp;·&nbsp; <a class="hero-tel" href="tel:+15149223336">514&nbsp;922-3336</a></p>
   </div>
@@ -747,10 +762,10 @@ html.js .rv.in{ opacity:1; transform:none; }
 
 <!-- ============ CONSOLE — SIMULATEUR GO/NO-GO ============ -->
 <section id="console">
-  <span class="tab">§03 · Essayez le gate</span>
+  <span class="tab">§03 · Démo</span>
   <div class="wrap">
     <div class="section-head rv">
-      <p class="eyebrow">Essayez le gate</p>
+      <p class="eyebrow">Démo interactive</p>
       <h2>Prenez le siège du patron. Rien ne part sans votre <span class="hl">GO</span>.</h2>
       <p class="lede">Une simulation en 60 secondes : un courriel fictif arrive, les agents font leur travail — et s'arrêtent devant vous. À vous de décider.</p>
     </div>
@@ -773,6 +788,15 @@ html.js .rv.in{ opacity:1; transform:none; }
             </div>
           </div>
           <button class="btn btn-go sim-run" id="simRun">Lancer le traitement</button>
+          <div class="sim-legend">
+            <div class="lh">Ce que vous voyez</div>
+            <p>Un courriel de fournisseur arrive chez un entrepreneur général de 5 à 100 employés. Les agents le traitent de bout en bout — puis s'arrêtent devant vous avant tout envoi.</p>
+            <ol>
+              <li><strong>Ils comprennent</strong> — classification et sources reliées</li>
+              <li><strong>Ils vérifient</strong> — écart chiffré, juges indépendants</li>
+              <li><strong>Vous décidez</strong> — le gate humain, jamais contourné</li>
+            </ol>
+          </div>
         </div>
         <div class="sim-pipe" id="simPipe" aria-live="polite">
           <div class="ps" id="ps1" hidden>
@@ -809,15 +833,16 @@ html.js .rv.in{ opacity:1; transform:none; }
               </div>
             </div>
           </div>
-          <div class="sim-result go" id="simResGo" hidden>
+          <div class="sim-result go" id="simResGo" tabindex="-1" hidden>
             <span>✓ Approuvé par vous. Dans le vrai système : l'envoi s'exécute, puis tout est journalisé — sources, versions, validations, votre approbation.</span>
             <span class="mono">JRNL · approuvé:humain · sources:3 · validation:PASS · (simulation)</span>
           </div>
-          <div class="sim-result nogo" id="simResNogo" hidden>
+          <div class="sim-result nogo" id="simResNogo" tabindex="-1" hidden>
             <span>◼ Retenu. Rien n'est parti. Dans le vrai système : le brouillon retourne en révision avec votre commentaire — et le refus est journalisé aussi.</span>
             <span class="mono">JRNL · retenu:humain · envoi:aucun · (simulation)</span>
           </div>
           <button class="btn btn-line btn-sm sim-replay" id="simReplay" hidden>Rejouer la simulation</button>
+          <p class="sim-cta" id="simCta" hidden>Vous voulez voir la vraie machine, sur de vraies opérations? <a href="mailto:sarah@ino-vita.com?subject=D%C3%A9mo%20%E2%80%94%20Ino-Vita%20AI">Réserver un appel de 30 min →</a></p>
         </div>
       </div>
     </div>
@@ -1092,7 +1117,7 @@ html.js .rv.in{ opacity:1; transform:none; }
         <ul>
           <li><a href="#probleme">Le problème</a></li>
           <li><a href="#systeme">Fonctionnement</a></li>
-          <li><a href="#console">Essayez le gate</a></li>
+          <li><a href="#console">Démo (60 s)</a></li>
           <li><a href="#preuves">Preuves</a></li>
           <li><a href="#deploiement">Déploiement</a></li>
           <li><a href="#offres">Offres</a></li>
@@ -1164,11 +1189,14 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var go = document.getElementById('simGo'), nogo = document.getElementById('simNogo');
   var resGo = document.getElementById('simResGo'), resNogo = document.getElementById('simResNogo');
   var replay = document.getElementById('simReplay');
+  var cta = document.getElementById('simCta');
   var timers = [];
   function reset(){
     timers.forEach(clearTimeout); timers = [];
     steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
     resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
+    if(cta) cta.hidden = true;
+    go.disabled = false; nogo.disabled = false;
     run.disabled = false;
   }
   run.addEventListener('click', function(){
@@ -1186,6 +1214,10 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function decide(el){
     resGo.hidden = true; resNogo.hidden = true;
     el.hidden = false; replay.hidden = false;
+    if(cta) cta.hidden = false;
+    go.disabled = true; nogo.disabled = true;
+    el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
+    try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
   }
   go.addEventListener('click', function(){ decide(resGo); });
   nogo.addEventListener('click', function(){ decide(resNogo); });

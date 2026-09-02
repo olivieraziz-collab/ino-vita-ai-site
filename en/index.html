@@ -15,6 +15,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Ino-Vita AI — governed AI agents for construction SMB operations">
+<link rel="canonical" href="https://ino-vita.ai/en/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ino-Vita AI — Governed AI agents for construction">
+<meta name="twitter:description" content="AI agents do the work between your tools. You keep the GO. 60-second interactive demo: ino-vita.ai/en/demo">
+<meta name="twitter:image" content="https://ino-vita.ai/og-image.png">
 <meta property="og:url" content="https://ino-vita.ai/en/">
 <link rel="alternate" hreflang="fr" href="https://ino-vita.ai/">
 <link rel="alternate" hreflang="en" href="https://ino-vita.ai/en/">
@@ -352,6 +357,16 @@ h3{ font-size:19px; font-weight:600; letter-spacing:.03em; margin-bottom:10px; l
 .sim-result.nogo{ background:var(--bg2); border:1px solid var(--line); }
 .sim-result .mono{ font-size:11.5px; display:block; margin-top:8px; color:var(--faint); }
 .sim-replay{ align-self:flex-start; }
+.btn:disabled{ opacity:.42; cursor:default; pointer-events:none; filter:saturate(.45); }
+.sim-legend{ margin-top:18px; border:1px solid var(--line-soft); border-radius:6px; background:var(--panel2); padding:14px 16px; }
+.sim-legend .lh{ font-family:var(--f-mono); font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+.sim-legend p{ margin:0 0 10px; font-size:13.5px; color:var(--dim); line-height:1.55; }
+.sim-legend ol{ margin:0; padding-left:18px; font-size:13px; color:var(--faint); line-height:1.7; }
+.sim-legend ol strong{ color:var(--dim); font-weight:600; }
+.sim-cta{ margin:2px 0 0; font-size:13.5px; color:var(--dim); }
+.sim-cta a{ color:var(--or); font-weight:600; text-decoration:none; border-bottom:1px solid rgba(255,107,26,.4); }
+.sim-cta a:hover{ border-bottom-color:var(--or); }
+.sim-result:focus{ outline:2px solid var(--cy); outline-offset:3px; }
 .sim-moral{
   margin-top:30px; text-align:center;
   font-family:var(--f-disp); font-size:clamp(19px, 2.4vw, 26px); font-weight:700;
@@ -599,7 +614,7 @@ html.js .rv.in{ opacity:1; transform:none; }
     <nav class="links" aria-label="Main navigation">
       <a href="#probleme">The problem</a>
       <a href="#systeme">How it works</a>
-      <a href="#console">Try the gate</a>
+      <a href="#console">Demo (60 s)</a>
       <a href="#preuves">Proof</a>
       <a href="#offres">Plans</a>
       <a href="#faq">FAQ</a>
@@ -615,7 +630,7 @@ html.js .rv.in{ opacity:1; transform:none; }
 <nav id="mobileMenu" aria-label="Mobile menu">
   <a href="#probleme">The problem</a>
   <a href="#systeme">How it works</a>
-  <a href="#console">Try the gate</a>
+  <a href="#console">Demo (60 s)</a>
   <a href="#preuves">Proof</a>
   <a href="#deploiement">Rollout</a>
   <a href="#offres">Plans</a>
@@ -634,7 +649,7 @@ html.js .rv.in{ opacity:1; transform:none; }
     <p class="lede">Ino-Vita AI runs the workflows between your email, your accounting, your drawings and your job sites. Every action cites its sources and is checked by independent AI models — and nothing external goes out without human sign-off. Built by a Montreal general contractor who runs it on his own operations, every day.</p>
     <div class="hero-ctas">
       <a class="btn btn-go btn-xl" href="mailto:sarah@ino-vita.com?subject=Intro%20call%20%E2%80%94%20Ino-Vita%20AI">Book a 30-minute call</a>
-      <a class="btn btn-line" href="#systeme">See how it works</a>
+      <a class="btn btn-line" href="#console"><span aria-hidden="true">▶</span> Watch the demo (60 s)</a>
     </div>
     <p class="hero-note"><span class="dot"></span> Every demo is a live system — not a slide deck. &nbsp;·&nbsp; <a class="hero-tel" href="tel:+15149223336">514&nbsp;922-3336</a></p>
   </div>
@@ -747,10 +762,10 @@ html.js .rv.in{ opacity:1; transform:none; }
 
 <!-- ============ CONSOLE — GO/NO-GO SIMULATOR ============ -->
 <section id="console">
-  <span class="tab">§03 · Try the gate</span>
+  <span class="tab">§03 · Demo</span>
   <div class="wrap">
     <div class="section-head rv">
-      <p class="eyebrow">Try the gate</p>
+      <p class="eyebrow">Interactive demo</p>
       <h2>Take the boss's seat. Nothing leaves without your <span class="hl">GO</span>.</h2>
       <p class="lede">A 60-second simulation: a fictional email comes in, the agents do their work — then stop in front of you. Your call.</p>
     </div>
@@ -773,6 +788,15 @@ html.js .rv.in{ opacity:1; transform:none; }
             </div>
           </div>
           <button class="btn btn-go sim-run" id="simRun">Run the workflow</button>
+          <div class="sim-legend">
+            <div class="lh">What you are looking at</div>
+            <p>A supplier email lands at a general contractor with 5 to 100 employees. The agents handle it end to end — then stop in front of you before anything is sent.</p>
+            <ol>
+              <li><strong>They understand</strong> — classification and linked sources</li>
+              <li><strong>They verify</strong> — quantified variance, independent judges</li>
+              <li><strong>You decide</strong> — the human gate, never bypassed</li>
+            </ol>
+          </div>
         </div>
         <div class="sim-pipe" id="simPipe" aria-live="polite">
           <div class="ps" id="ps1" hidden>
@@ -809,15 +833,16 @@ html.js .rv.in{ opacity:1; transform:none; }
               </div>
             </div>
           </div>
-          <div class="sim-result go" id="simResGo" hidden>
+          <div class="sim-result go" id="simResGo" tabindex="-1" hidden>
             <span>✓ Approved by you. In the real system: the send executes, then everything is logged — sources, versions, validations, your approval.</span>
             <span class="mono">LOG · approved:human · sources:3 · validation:PASS · (simulation)</span>
           </div>
-          <div class="sim-result nogo" id="simResNogo" hidden>
+          <div class="sim-result nogo" id="simResNogo" tabindex="-1" hidden>
             <span>◼ Held. Nothing went out. In the real system: the draft goes back for revision with your comment — and the refusal is logged too.</span>
             <span class="mono">LOG · held:human · sent:none · (simulation)</span>
           </div>
           <button class="btn btn-line btn-sm sim-replay" id="simReplay" hidden>Replay the simulation</button>
+          <p class="sim-cta" id="simCta" hidden>Want to see the real machine, on real operations? <a href="mailto:sarah@ino-vita.com?subject=Demo%20%E2%80%94%20Ino-Vita%20AI">Book a 30-minute call →</a></p>
         </div>
       </div>
     </div>
@@ -1092,7 +1117,7 @@ html.js .rv.in{ opacity:1; transform:none; }
         <ul>
           <li><a href="#probleme">The problem</a></li>
           <li><a href="#systeme">How it works</a></li>
-          <li><a href="#console">Try the gate</a></li>
+          <li><a href="#console">Demo (60 s)</a></li>
           <li><a href="#preuves">Proof</a></li>
           <li><a href="#deploiement">Rollout</a></li>
           <li><a href="#offres">Plans</a></li>
@@ -1166,11 +1191,14 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var go = document.getElementById('simGo'), nogo = document.getElementById('simNogo');
   var resGo = document.getElementById('simResGo'), resNogo = document.getElementById('simResNogo');
   var replay = document.getElementById('simReplay');
+  var cta = document.getElementById('simCta');
   var timers = [];
   function reset(){
     timers.forEach(clearTimeout); timers = [];
     steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
     resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
+    if(cta) cta.hidden = true;
+    go.disabled = false; nogo.disabled = false;
     run.disabled = false;
   }
   run.addEventListener('click', function(){
@@ -1188,6 +1216,10 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function decide(el){
     resGo.hidden = true; resNogo.hidden = true;
     el.hidden = false; replay.hidden = false;
+    if(cta) cta.hidden = false;
+    go.disabled = true; nogo.disabled = true;
+    el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
+    try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
   }
   go.addEventListener('click', function(){ decide(resGo); });
   nogo.addEventListener('click', function(){ decide(resNogo); });
