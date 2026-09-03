@@ -3,40 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demo — Ino-Vita AI</title>
+<title>Demo (60 s) — Ino-Vita AI</title>
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://ino-vita.ai/en/#console">
-<meta http-equiv="refresh" content="0; url=/en/#console">
-<meta name="description" content="A 60-second interactive simulation: a fictional email comes in, the AI agents do the work — then stop in front of you for the GO.">
-<meta property="og:title" content="Demo — Ino-Vita AI">
-<meta property="og:description" content="A 60-second interactive simulation: a fictional email comes in, the AI agents do the work — then stop in front of you for the GO.">
+<meta name="description" content="A 60-second interactive simulation: a fictional email comes in, the AI agents do the work — then stop in front of you for the GO. Watch, then try it.">
+<meta property="og:title" content="Demo (60 s) — Ino-Vita AI">
+<meta property="og:description" content="A 60-second interactive simulation: a fictional email comes in, the AI agents do the work — then stop in front of you for the GO. Watch, then try it.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://ino-vita.ai/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://ino-vita.ai/en/#console">
+<meta property="og:url" content="https://ino-vita.ai/en/demo/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Demo — Ino-Vita AI">
+<meta name="twitter:title" content="Demo (60 s) — Ino-Vita AI">
 <meta name="twitter:description" content="A 60-second interactive simulation: a fictional email comes in, the AI agents do the work — then stop in front of you for the GO.">
 <meta name="twitter:image" content="https://ino-vita.ai/og-image.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
   :root{ color-scheme:dark; }
-  html,body{ margin:0; height:100%; background:#0a1017; color:#e8eef4;
+  html,body{ margin:0; min-height:100%; background:#0a1017; color:#e8eef4;
     font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
   main{ min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:18px; padding:32px; text-align:center; }
+    gap:20px; padding:32px 20px 48px; text-align:center; }
+  h1{ margin:0; font-size:clamp(22px,4vw,32px); letter-spacing:.01em; }
   p{ margin:0; color:#93a4b5; font-size:15px; line-height:1.6; max-width:34em; }
-  a{ display:inline-block; background:#ff6b1a; color:#0a1017; text-decoration:none;
+  video{ width:100%; max-width:900px; border-radius:8px; border:1px solid #223042;
+    box-shadow:0 12px 40px rgba(0,0,0,.45); background:#000; }
+  .ctas{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+  a.btn{ display:inline-block; background:#ff6b1a; color:#0a1017; text-decoration:none;
     font-weight:700; padding:14px 26px; border-radius:4px; font-size:16px; }
+  a.btn.line{ background:transparent; color:#e8eef4; border:1px solid #3a4b5e; }
   a:focus-visible{ outline:3px solid #58d8ff; outline-offset:3px; }
+  .badge{ display:inline-block; font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+    color:#ff6b1a; border:1px solid #ff6b1a; border-radius:999px; padding:4px 12px; }
+  .note{ font-size:13px; color:#5c7188; }
 </style>
 </head>
 <body>
 <main>
-  <p>Opening the interactive demo…</p>
-  <a href="/en/#console">Watch the demo (60 s)</a>
+  <span class="badge">Simulation — fictional data</span>
+  <h1>Watch the demo (45 s), then try it yourself</h1>
+  <p>A fictional email comes in, the AI agents do the work — sources cited, cross-model validation — and stop in front of you for the GO. No real system is connected.</p>
+  <video controls preload="metadata" aria-label="Ino-Vita AI demo video, 45 seconds">
+    <source src="/demo/video/demo-ino-vita-ai-2026-09-03.mp4" type="video/mp4">
+    <source src="/demo/video/demo-ino-vita-ai-2026-09-03.webm" type="video/webm">
+    Your browser does not support embedded video —
+    <a href="/demo/video/demo-ino-vita-ai-2026-09-03.mp4">download the video (MP4)</a>.
+  </video>
+  <p class="note">Recorded walkthrough is in French (site interface); the live interactive demo below is fully bilingual.</p>
+  <div class="ctas">
+    <a class="btn" href="/en/#console"><span aria-hidden="true">▶</span> Try the live demo</a>
+    <a class="btn line" href="mailto:sarah@ino-vita.com?subject=Appel%20exploratoire%20%E2%80%94%20Ino-Vita%20AI">Book a 30-min call</a>
+  </div>
 </main>
-<script>location.replace('/en/#console');</script>
 </body>
 </html>
