@@ -54,6 +54,7 @@
   --or-hot:    #FF8A3D;
   --or-ink:    #170A02;   /* texte sur orange */
   --ok:        #38D98B;   /* validé */
+  --warn:      #F5B942;   /* avertissement */
   --shadow: 0 2px 6px rgba(0,0,0,.45), 0 18px 48px rgba(0,0,0,.5);
   --f-disp: "Chakra Petch", "Arial Narrow", Arial, sans-serif;
   --f-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
@@ -373,6 +374,62 @@ h3{ font-size:19px; font-weight:600; letter-spacing:.03em; margin-bottom:10px; l
   text-transform:uppercase; letter-spacing:.03em;
 }
 
+/* ---------- Case selector ---------- */
+.case-tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+.case-tab{
+  font-family:var(--f-mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--dim); background:var(--panel2); border:1px solid var(--line-soft); border-radius:5px;
+  padding:9px 14px; cursor:pointer; transition:color .15s,border-color .15s,background .15s;
+}
+.case-tab:hover{ color:var(--ink); border-color:var(--cy-dim); }
+.case-tab[aria-selected="true"]{ color:var(--or-ink); background:var(--or); border-color:var(--or); font-weight:700; }
+.case-panel[hidden]{ display:none; }
+
+/* ---------- Agent progress bar ---------- */
+.sim-progress{ padding:14px 26px 0; }
+.sim-progress-track{ height:4px; background:var(--line-soft); border-radius:3px; overflow:hidden; }
+.sim-progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--cy-dim),var(--or)); transition:width .5s ease; }
+.sim-progress-fill.reduced{ transition:none; }
+.sim-progress-labels{ display:flex; justify-content:space-between; margin-top:7px; gap:4px; }
+.sim-progress-labels span{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.03em; color:var(--faint);
+  text-align:center; flex:1; transition:color .2s;
+}
+.sim-progress-labels span.on{ color:var(--or); font-weight:700; }
+
+/* ---------- Caption bar (?captions=1 mode) ---------- */
+.caption-bar{
+  margin:0 26px; padding:10px 14px; background:rgba(255,107,26,.1); border:1px solid rgba(255,107,26,.45);
+  border-radius:5px; color:var(--ink); font-size:14px; line-height:1.4; display:flex; gap:8px; align-items:flex-start;
+}
+.caption-bar::before{ content:"CC"; font-family:var(--f-mono); font-size:10px; font-weight:700; color:var(--or);
+  border:1px solid var(--or); border-radius:3px; padding:1px 4px; flex:none; margin-top:2px; }
+.caption-bar.cc-fixed{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:60;
+  width:min(760px, 92vw); margin:0; background:rgba(6,13,20,.96); box-shadow:var(--shadow);
+}
+
+/* ---------- Analysis table (billed / proven / gap) ---------- */
+.analyse-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+.analyse-table th,.analyse-table td{ padding:8px 10px; border-bottom:1px solid var(--line-soft); text-align:right; }
+.analyse-table th:first-child,.analyse-table td:first-child{ text-align:left; color:var(--dim); }
+.analyse-table th{ font-family:var(--f-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); }
+.analyse-table td.gap{ color:var(--or-hot); font-weight:700; }
+.analyse-table tr.total td{ font-weight:700; color:var(--ink); border-top:1px solid var(--line); border-bottom:none; }
+.clausebox{
+  margin-top:10px; border-left:3px solid var(--cy-dim); background:var(--panel2); border-radius:0 4px 4px 0;
+  padding:9px 12px; font-size:12.5px; color:var(--dim); font-style:italic;
+}
+.clausebox strong{ font-style:normal; color:var(--cy); }
+
+/* ---------- Score with warning ---------- */
+.score.warn{ border-color:rgba(245,185,66,.5); background:rgba(245,185,66,.07); }
+.score.warn .sn{ color:var(--warn); }
+.warn-note{
+  margin-top:8px; font-size:12.5px; color:var(--warn); border-left:3px solid var(--warn);
+  padding:6px 10px; background:rgba(245,185,66,.06); border-radius:0 4px 4px 0;
+}
+
 /* ---------- Bande CTA mi-page ---------- */
 .ctaband{
   border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
@@ -588,6 +645,10 @@ html.js .rv.in{ opacity:1; transform:none; }
   .foot-cols{ grid-template-columns:1fr; gap:26px; }
   .ctaband .wrap{ justify-content:center; text-align:center; }
   .btn-xl{ padding:17px 26px; font-size:16.5px; }
+  .sim-progress-labels span{ font-size:8.5px; }
+  .case-tab{ flex:1 1 auto; text-align:center; padding:9px 8px; }
+  .analyse-table{ font-size:12px; }
+  .analyse-table th,.analyse-table td{ padding:6px 6px; }
 }
 </style>
 </head>
@@ -767,82 +828,187 @@ html.js .rv.in{ opacity:1; transform:none; }
     <div class="section-head rv">
       <p class="eyebrow">Interactive demo</p>
       <h2>Take the boss's seat. Nothing leaves without your <span class="hl">GO</span>.</h2>
-      <p class="lede">A 60-second simulation: a fictional email comes in, the agents do their work — then stop in front of you. Your call.</p>
+      <p class="lede">Two cases, fictional data (example): a disputed subcontractor email, and a construction progress claim. The agents do the work — then stop in front of you. Your call.</p>
+    </div>
+    <div class="case-tabs rv" role="tablist" aria-label="Choose a demo case">
+      <button class="case-tab" id="caseTabSt" role="tab" aria-selected="true" aria-controls="casePanelSt">Case 1 — Subcontractor email</button>
+      <button class="case-tab" id="caseTabDdp" role="tab" aria-selected="false" aria-controls="casePanelDdp">Case 2 — Progress claim</button>
     </div>
     <div class="sim-frame rv">
       <div class="sim-topbar">
         <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="sim-badge">Simulation — fictional data</span>
+        <span class="sim-badge">Simulation — fictional data (example)</span>
         <span>No live systems connected · demonstrates the mechanism only</span>
       </div>
-      <div class="sim-cols">
-        <div class="sim-mail">
-          <div class="mailcard">
-            <div class="mailhead">
-              <div class="row"><span class="k">From</span><span class="v">Example Supplier Inc. (fictional)</span></div>
-              <div class="row"><span class="k">Subject</span><span class="v">Revised quote — doors &amp; frames package</span></div>
-            </div>
-            <div class="mailbody">
-              <p>"Hi, further to the requested changes, please find our revised quote at $9,800. Kindly confirm so we can start production."</p>
-              <p class="mono" style="font-size:11.5px">Attachment: revised-quote.pdf (fictional)</p>
-            </div>
-          </div>
-          <button class="btn btn-go sim-run" id="simRun">Run the workflow</button>
-          <div class="sim-legend">
-            <div class="lh">What you are looking at</div>
-            <p>A supplier email lands at a general contractor with 5 to 100 employees. The agents handle it end to end — then stop in front of you before anything is sent.</p>
-            <ol>
-              <li><strong>They understand</strong> — classification and linked sources</li>
-              <li><strong>They verify</strong> — quantified variance, independent judges</li>
-              <li><strong>You decide</strong> — the human gate, never bypassed</li>
-            </ol>
-          </div>
-        </div>
-        <div class="sim-pipe" id="simPipe" aria-live="polite">
-          <div class="ps" id="ps1" hidden>
-            <div class="ph"><span>1 · Classification</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb tagrow">
-              <span class="tag-chip">Supplier quote</span>
-              <span class="tag-chip">Project A (fictional)</span>
-              <span class="tag-chip">Reply expected</span>
-            </div>
-          </div>
-          <div class="ps" id="ps2" hidden>
-            <div class="ph"><span>2 · Context retrieved — sources cited</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb"><p>3 sources linked: the email thread, purchase order PO-0000 (fictional, $9,200) and drawing rev.04. <strong>Discrepancy flagged: +$600 vs the purchase order.</strong></p></div>
-          </div>
-          <div class="ps" id="ps3" hidden>
-            <div class="ph"><span>3 · Draft prepared</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb draftbox">"Hi, we confirm receipt of your revised quote. Before we confirm, please justify the $600 difference against purchase order PO-0000…"</div>
-          </div>
-          <div class="ps" id="ps4" hidden>
-            <div class="ph"><span>4 · Cross-validation — independent models (simulated)</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb scorerow">
-              <div class="score"><div class="sn">9.6</div><div class="sl">Judge — family A</div></div>
-              <div class="score"><div class="sn">9.8</div><div class="sl">Judge — family B</div></div>
-              <div class="score"><div class="sn">9.7</div><div class="sl">Judge — family C</div></div>
-            </div>
-          </div>
-          <div class="ps gatebox" id="ps5" hidden>
-            <div class="ph"><span>5 · Human gate — external action detected</span></div>
-            <div class="pb">
-              <p>This draft would go to a supplier: that's an external action. The machine stops here. Your move.</p>
-              <div class="gate-actions">
-                <button class="btn btn-go" id="simGo">GO — approve &amp; send</button>
-                <button class="btn btn-line" id="simNogo">NO-GO — hold it</button>
+      <div class="sim-progress" aria-hidden="true">
+        <div class="sim-progress-track"><div class="sim-progress-fill" id="simProgressFill"></div></div>
+        <div class="sim-progress-labels" id="simProgressLabels"></div>
+      </div>
+      <div class="caption-bar" id="captionBar" hidden></div>
+
+      <!-- ===== CASE 1 — Disputed subcontractor email ===== -->
+      <div class="case-panel" id="casePanelSt">
+        <div class="sim-cols">
+          <div class="sim-mail">
+            <div class="mailcard">
+              <div class="mailhead">
+                <div class="row"><span class="k">From</span><span class="v">North Plumbing Inc. (example)</span></div>
+                <div class="row"><span class="k">Subject</span><span class="v">Invoice #4471 — basement connection, Maple Elementary (example)</span></div>
+              </div>
+              <div class="mailbody">
+                <p>"Hi, attached is our invoice for $18,000 for the basement plumbing connection, including a $4,000 extra for unforeseen soil conditions. Please confirm payment promptly."</p>
+                <p class="mono" style="font-size:11.5px">Attachment: invoice-4471-18000.pdf (example)</p>
               </div>
             </div>
+            <button class="btn btn-go sim-run" id="simRunSt">Run the workflow</button>
+            <div class="sim-legend">
+              <div class="lh">What you are looking at</div>
+              <p>A disputed subcontractor email lands at a general contractor with 5 to 100 employees. The agents handle it end to end — then stop in front of you before anything goes out.</p>
+              <ol>
+                <li><strong>They read</strong> — the thread, the contract, the site directives</li>
+                <li><strong>They analyze</strong> — billed vs. proven, clause cited</li>
+                <li><strong>They draft</strong> — a reply in your voice</li>
+                <li><strong>They verify</strong> — 3 independent judges, warnings explained</li>
+                <li><strong>You decide</strong> — the human gate, never bypassed</li>
+              </ol>
+            </div>
           </div>
-          <div class="sim-result go" id="simResGo" tabindex="-1" hidden>
-            <span>✓ Approved by you. In the real system: the send executes, then everything is logged — sources, versions, validations, your approval.</span>
-            <span class="mono">LOG · approved:human · sources:3 · validation:PASS · (simulation)</span>
+          <div class="sim-pipe" id="simPipeSt" aria-live="polite">
+            <div class="ps" id="stPs1" hidden data-caption="The agent reads the email thread, finds the contract and the site directive.">
+              <div class="ph"><span>1 · Reading — thread, contract, directives</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb tagrow">
+                <span class="tag-chip">Email thread — 6 messages</span>
+                <span class="tag-chip">Plumbing package contract, art. 4.2</span>
+                <span class="tag-chip">Site directives — no match</span>
+              </div>
+            </div>
+            <div class="ps" id="stPs2" hidden data-caption="It compares billed vs. proven, line by line, and cites the exact contract clause.">
+              <div class="ph"><span>2 · Analysis — billed vs. proven</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <table class="analyse-table">
+                  <thead><tr><th>Line item</th><th>Billed</th><th>Proven</th><th>Gap</th></tr></thead>
+                  <tbody>
+                    <tr><td>Connection (lump sum)</td><td>$14,000</td><td>$14,000</td><td>$0</td></tr>
+                    <tr><td>Extra "soil conditions"</td><td>$4,000</td><td>$0</td><td class="gap">+$4,000</td></tr>
+                    <tr class="total"><td>Total</td><td>$18,000</td><td>$14,000</td><td class="gap">+$4,000</td></tr>
+                  </tbody>
+                </table>
+                <div class="clausebox"><strong>Contract, art. 4.2:</strong> "Any extra requires a written site directive prior to execution." No matching directive found for this line item.</div>
+              </div>
+            </div>
+            <div class="ps" id="stPs3" hidden data-caption="It drafts a reply in the owner's tone — nothing is sent.">
+              <div class="ph"><span>3 · Draft prepared — in your voice</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb draftbox">"I confirm receipt of the $18,000 invoice. The lump-sum connection ($14,000) is compliant and will be processed normally. The $4,000 extra is not covered: our contract (art. 4.2) requires a written directive before execution, and we have no record of one. Please send that directive if it exists, or resubmit the extra as a quote before proceeding."</div>
+            </div>
+            <div class="ps" id="stPs4" hidden data-caption="Three independent models validate the draft; a warning is explained, not hidden.">
+              <div class="ph"><span>4 · Cross-validation — 3 independent judges</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <div class="scorerow">
+                  <div class="score"><div class="sn">9.6</div><div class="sl">Judge — family A</div></div>
+                  <div class="score warn"><div class="sn">8.2</div><div class="sl">Judge — family B · warning</div></div>
+                  <div class="score"><div class="sn">9.4</div><div class="sl">Judge — family C</div></div>
+                </div>
+                <div class="warn-note">⚠ Warning (family B): the draft doesn't propose a response deadline for the subcontractor — add one before sending.</div>
+              </div>
+            </div>
+            <div class="ps gatebox" id="stPs5" hidden data-caption="The owner decides: Approve or Hold. The decision is logged.">
+              <div class="ph"><span>5 · Human gate — external action detected</span></div>
+              <div class="pb">
+                <p>This draft would go to a subcontractor: that's an external action. The machine stops here. Your move.</p>
+                <div class="gate-actions">
+                  <button class="btn btn-go" id="simGoSt">GO — approve &amp; send</button>
+                  <button class="btn btn-line" id="simNogoSt">NO-GO — hold it</button>
+                </div>
+              </div>
+            </div>
+            <div class="sim-result go" id="simResGoSt" tabindex="-1" hidden>
+              <span>✓ Approved by you. In the real system: the send executes, then everything is logged — sources, versions, validations, your approval.</span>
+              <span class="mono">LOG · approved:human · sources:3 · validation:9.6/8.2/9.4 · warning:logged · (simulation)</span>
+            </div>
+            <div class="sim-result nogo" id="simResNogoSt" tabindex="-1" hidden>
+              <span>◼ Held. Nothing went out. In the real system: the draft goes back for revision with your comment — and the hold is logged too.</span>
+              <span class="mono">LOG · held:human · sent:none · (simulation)</span>
+            </div>
+            <button class="btn btn-line btn-sm sim-replay" id="simReplaySt" hidden>Replay the simulation</button>
+            <p class="sim-cta" id="simCtaSt" hidden>Want to see the real machine, on real operations? <a href="mailto:sarah@ino-vita.com?subject=Demo%20%E2%80%94%20Ino-Vita%20AI">Book a 30-min call →</a></p>
           </div>
-          <div class="sim-result nogo" id="simResNogo" tabindex="-1" hidden>
-            <span>◼ Held. Nothing went out. In the real system: the draft goes back for revision with your comment — and the refusal is logged too.</span>
-            <span class="mono">LOG · held:human · sent:none · (simulation)</span>
+        </div>
+      </div>
+
+      <!-- ===== CASE 2 — Construction progress claim ===== -->
+      <div class="case-panel" id="casePanelDdp" hidden>
+        <div class="sim-cols">
+          <div class="sim-mail">
+            <div class="mailcard">
+              <div class="mailhead">
+                <div class="row"><span class="k">From</span><span class="v">Beauport Structures Inc. (example)</span></div>
+                <div class="row"><span class="k">Subject</span><span class="v">Progress claim #7 — Maple Elementary (example)</span></div>
+              </div>
+              <div class="mailbody">
+                <p>"Hi, here's our claim #7: foundations 100%, steel framing 85%, floor slabs 40%. Photos and the site supervision report are attached."</p>
+                <p class="mono" style="font-size:11.5px">Attachment: progress-claim-7.pdf + 12 photos (example)</p>
+              </div>
+            </div>
+            <button class="btn btn-go sim-run" id="simRunDdp">Run the workflow</button>
+            <div class="sim-legend">
+              <div class="lh">What you are looking at</div>
+              <p>A progress claim arrives: billed per line item vs. what the photos and site supervision report actually prove.</p>
+              <ol>
+                <li><strong>They read</strong> — claim, photos, supervision report</li>
+                <li><strong>They analyze</strong> — % billed vs. % proven, per line item</li>
+                <li><strong>You decide</strong> — approve or hold the gap</li>
+              </ol>
+            </div>
           </div>
-          <button class="btn btn-line btn-sm sim-replay" id="simReplay" hidden>Replay the simulation</button>
-          <p class="sim-cta" id="simCta" hidden>Want to see the real machine, on real operations? <a href="mailto:sarah@ino-vita.com?subject=Demo%20%E2%80%94%20Ino-Vita%20AI">Book a 30-minute call →</a></p>
+          <div class="sim-pipe" id="simPipeDdp" aria-live="polite">
+            <div class="ps" id="ddpPs1" hidden data-caption="The agent reads the progress claim, the site photos, and the supervision report.">
+              <div class="ph"><span>1 · Reading — claim, photos, supervision</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb tagrow">
+                <span class="tag-chip">Progress claim #7 (example)</span>
+                <span class="tag-chip">12 dated photos</span>
+                <span class="tag-chip">Site supervision report — week 34</span>
+              </div>
+            </div>
+            <div class="ps" id="ddpPs2" hidden data-caption="It calculates the gap between the percentage billed and what the evidence shows, line by line.">
+              <div class="ph"><span>2 · Analysis — % billed vs. % proven</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <table class="analyse-table">
+                  <thead><tr><th>Line item</th><th>Billed</th><th>Proven (photos/report)</th><th>Gap</th></tr></thead>
+                  <tbody>
+                    <tr><td>Foundations</td><td>100%</td><td>100%</td><td>0 pt</td></tr>
+                    <tr><td>Steel framing</td><td>85%</td><td>60%</td><td class="gap">−25 pts</td></tr>
+                    <tr><td>Floor slabs</td><td>40%</td><td>40%</td><td>0 pt</td></tr>
+                    <tr class="total"><td>Weighted total</td><td>78%</td><td>68%</td><td class="gap">−10 pts</td></tr>
+                  </tbody>
+                </table>
+                <div class="clausebox"><strong>Evidence:</strong> the dated photos show the east wing framing not installed; the supervision report (week 34) confirms only 60% progress on this line item.</div>
+              </div>
+            </div>
+            <div class="ps" id="ddpPs3" hidden data-caption="It drafts an internal note recommending a partial holdback on the gapped line item.">
+              <div class="ph"><span>3 · Draft prepared — internal note</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb draftbox">"Steel framing billed at 85% but the photos show only 60% installed (east wing incomplete). I recommend holding back 25 percentage points on this line item until confirmed by the site superintendent."</div>
+            </div>
+            <div class="ps gatebox" id="ddpPs4" hidden data-caption="The owner decides: approve the proposed holdback or pay in full.">
+              <div class="ph"><span>4 · Human gate — claim to certify</span></div>
+              <div class="pb">
+                <p>Certifying this claim is a financial decision: the machine stops here. Your move.</p>
+                <div class="gate-actions">
+                  <button class="btn btn-go" id="simGoDdp">GO — approve the 25-pt holdback</button>
+                  <button class="btn btn-line" id="simNogoDdp">NO-GO — pay in full</button>
+                </div>
+              </div>
+            </div>
+            <div class="sim-result go" id="simResGoDdp" tabindex="-1" hidden>
+              <span>✓ 25-pt holdback approved by you on the framing. In the real system: the adjusted claim is logged — photos, report, your decision.</span>
+              <span class="mono">LOG · approved:human · line-item:framing · holdback:25pts · (simulation)</span>
+            </div>
+            <div class="sim-result nogo" id="simResNogoDdp" tabindex="-1" hidden>
+              <span>◼ Paid in full by you, despite the flagged gap. In the real system: your decision and the reservation are logged together.</span>
+              <span class="mono">LOG · decision:human · reservation:logged · (simulation)</span>
+            </div>
+            <button class="btn btn-line btn-sm sim-replay" id="simReplayDdp" hidden>Replay the simulation</button>
+            <p class="sim-cta" id="simCtaDdp" hidden>Want to see the real machine, on real operations? <a href="mailto:sarah@ino-vita.com?subject=Demo%20%E2%80%94%20Ino-Vita%20AI">Book a 30-min call →</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -1183,47 +1349,131 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   els.forEach(function(el){ io.observe(el); });
 })();
 
-/* ---------- Simulateur GO/NO-GO ---------- */
+/* ---------- GO/NO-GO simulator — 2 cases, captions, progress bar ---------- */
 (function(){
-  var run = document.getElementById('simRun');
-  if(!run) return;
-  var steps = ['ps1','ps2','ps3','ps4','ps5'].map(function(id){ return document.getElementById(id); });
-  var go = document.getElementById('simGo'), nogo = document.getElementById('simNogo');
-  var resGo = document.getElementById('simResGo'), resNogo = document.getElementById('simResNogo');
-  var replay = document.getElementById('simReplay');
-  var cta = document.getElementById('simCta');
-  var timers = [];
-  function reset(){
-    timers.forEach(clearTimeout); timers = [];
-    steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
-    resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
-    if(cta) cta.hidden = true;
-    go.disabled = false; nogo.disabled = false;
-    run.disabled = false;
-  }
-  run.addEventListener('click', function(){
-    reset();
-    run.disabled = true;
-    var delay = REDUCED ? 0 : 750;
-    steps.forEach(function(s, i){
-      timers.push(setTimeout(function(){
-        s.hidden = false;
-        if(!REDUCED) s.classList.add('appear');
-        if(i === steps.length - 1) s.scrollIntoView({ block:'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
-      }, delay * (i + 1)));
+  var CAPTIONS = /(?:^|[?&])captions=1(?:&|$)/.test(location.search);
+  var captionBar = document.getElementById('captionBar');
+  var progressFill = document.getElementById('simProgressFill');
+  var progressLabels = document.getElementById('simProgressLabels');
+  if(!progressFill || !progressLabels) return;
+
+  var cases = {
+    st: {
+      stepIds: ['stPs1','stPs2','stPs3','stPs4','stPs5'],
+      labels: ['1 Read','2 Analysis','3 Draft','4 Validation','5 Decision'],
+      runId:'simRunSt', goId:'simGoSt', nogoId:'simNogoSt',
+      resGoId:'simResGoSt', resNogoId:'simResNogoSt', replayId:'simReplaySt', ctaId:'simCtaSt'
+    },
+    ddp: {
+      stepIds: ['ddpPs1','ddpPs2','ddpPs3','ddpPs4'],
+      labels: ['1 Read','2 Analysis','3 Note','4 Decision'],
+      runId:'simRunDdp', goId:'simGoDdp', nogoId:'simNogoDdp',
+      resGoId:'simResGoDdp', resNogoId:'simResNogoDdp', replayId:'simReplayDdp', ctaId:'simCtaDdp'
+    }
+  };
+
+  var active = 'st';
+  var controllers = {};
+
+  function buildProgressLabels(labels){
+    progressLabels.innerHTML = '';
+    labels.forEach(function(t){
+      var span = document.createElement('span');
+      span.textContent = t;
+      progressLabels.appendChild(span);
     });
-  });
-  function decide(el){
-    resGo.hidden = true; resNogo.hidden = true;
-    el.hidden = false; replay.hidden = false;
-    if(cta) cta.hidden = false;
-    go.disabled = true; nogo.disabled = true;
-    el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
-    try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
   }
-  go.addEventListener('click', function(){ decide(resGo); });
-  nogo.addEventListener('click', function(){ decide(resNogo); });
-  replay.addEventListener('click', function(){ reset(); run.click(); });
+  function setProgress(n, total){
+    var pct = total ? Math.round((n / total) * 100) : 0;
+    progressFill.style.width = pct + '%';
+    if(REDUCED) progressFill.classList.add('reduced');
+    var spans = progressLabels.querySelectorAll('span');
+    spans.forEach(function(s, i){ s.classList.toggle('on', i < n); });
+  }
+  function showCaption(text){
+    if(!CAPTIONS || !captionBar) return;
+    captionBar.classList.add('cc-fixed');
+    if(!text){ captionBar.hidden = true; return; }
+    captionBar.textContent = text;
+    captionBar.hidden = false;
+  }
+
+  function makeController(key){
+    var cfg = cases[key];
+    var steps = cfg.stepIds.map(function(id){ return document.getElementById(id); });
+    var run = document.getElementById(cfg.runId);
+    if(!run) return null;
+    var go = document.getElementById(cfg.goId), nogo = document.getElementById(cfg.nogoId);
+    var resGo = document.getElementById(cfg.resGoId), resNogo = document.getElementById(cfg.resNogoId);
+    var replay = document.getElementById(cfg.replayId);
+    var cta = document.getElementById(cfg.ctaId);
+    var timers = [];
+
+    function reset(){
+      timers.forEach(clearTimeout); timers = [];
+      steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
+      resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
+      if(cta) cta.hidden = true;
+      go.disabled = false; nogo.disabled = false;
+      run.disabled = false;
+      if(active === key){ setProgress(0, steps.length); showCaption(null); }
+    }
+    function launch(){
+      reset();
+      run.disabled = true;
+      var delay = REDUCED ? 0 : (CAPTIONS ? 5000 : 900);
+      steps.forEach(function(s, i){
+        timers.push(setTimeout(function(){
+          if(active !== key) return;
+          s.hidden = false;
+          if(!REDUCED) s.classList.add('appear');
+          setProgress(i + 1, steps.length);
+          showCaption(s.getAttribute('data-caption'));
+          if(CAPTIONS || i === steps.length - 1) s.scrollIntoView({ block:'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
+        }, delay * (i + 1)));
+      });
+    }
+    function decide(el, resultCaption){
+      resGo.hidden = true; resNogo.hidden = true;
+      el.hidden = false; replay.hidden = false;
+      if(cta) cta.hidden = false;
+      go.disabled = true; nogo.disabled = true;
+      if(active === key) showCaption(resultCaption);
+      el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
+      try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
+    }
+    run.addEventListener('click', launch);
+    go.addEventListener('click', function(){ decide(resGo, 'Decision: Approve. It is logged — sources, validations, your name.'); });
+    nogo.addEventListener('click', function(){ decide(resNogo, 'Decision: Hold. Nothing went out — the decision is logged too.'); });
+    replay.addEventListener('click', function(){ reset(); run.click(); });
+    return { reset: reset, labels: cfg.labels, total: steps.length };
+  }
+
+  Object.keys(cases).forEach(function(key){
+    var c = makeController(key);
+    if(c) controllers[key] = c;
+  });
+
+  var tabSt = document.getElementById('caseTabSt'), tabDdp = document.getElementById('caseTabDdp');
+  var panelSt = document.getElementById('casePanelSt'), panelDdp = document.getElementById('casePanelDdp');
+  function switchCase(key){
+    if(active === key || !panelSt || !panelDdp) return;
+    if(controllers[active]) controllers[active].reset();
+    active = key;
+    var toSt = key === 'st';
+    panelSt.hidden = !toSt; panelDdp.hidden = toSt;
+    tabSt.setAttribute('aria-selected', toSt ? 'true' : 'false');
+    tabDdp.setAttribute('aria-selected', toSt ? 'false' : 'true');
+    if(controllers[key]){
+      buildProgressLabels(controllers[key].labels);
+      setProgress(0, controllers[key].total);
+    }
+    showCaption(null);
+  }
+  if(tabSt) tabSt.addEventListener('click', function(){ switchCase('st'); });
+  if(tabDdp) tabDdp.addEventListener('click', function(){ switchCase('ddp'); });
+
+  if(controllers.st){ buildProgressLabels(controllers.st.labels); setProgress(0, controllers.st.total); }
 })();
 
 /* ---------- Hero : la charpente est un réseau (canvas) ---------- */

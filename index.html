@@ -54,6 +54,7 @@
   --or-hot:    #FF8A3D;
   --or-ink:    #170A02;   /* texte sur orange */
   --ok:        #38D98B;   /* validé */
+  --warn:      #F5B942;   /* avertissement */
   --shadow: 0 2px 6px rgba(0,0,0,.45), 0 18px 48px rgba(0,0,0,.5);
   --f-disp: "Chakra Petch", "Arial Narrow", Arial, sans-serif;
   --f-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
@@ -373,6 +374,62 @@ h3{ font-size:19px; font-weight:600; letter-spacing:.03em; margin-bottom:10px; l
   text-transform:uppercase; letter-spacing:.03em;
 }
 
+/* ---------- Sélecteur de cas ---------- */
+.case-tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+.case-tab{
+  font-family:var(--f-mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--dim); background:var(--panel2); border:1px solid var(--line-soft); border-radius:5px;
+  padding:9px 14px; cursor:pointer; transition:color .15s,border-color .15s,background .15s;
+}
+.case-tab:hover{ color:var(--ink); border-color:var(--cy-dim); }
+.case-tab[aria-selected="true"]{ color:var(--or-ink); background:var(--or); border-color:var(--or); font-weight:700; }
+.case-panel[hidden]{ display:none; }
+
+/* ---------- Barre de progression des agents ---------- */
+.sim-progress{ padding:14px 26px 0; }
+.sim-progress-track{ height:4px; background:var(--line-soft); border-radius:3px; overflow:hidden; }
+.sim-progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--cy-dim),var(--or)); transition:width .5s ease; }
+.sim-progress-fill.reduced{ transition:none; }
+.sim-progress-labels{ display:flex; justify-content:space-between; margin-top:7px; gap:4px; }
+.sim-progress-labels span{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.03em; color:var(--faint);
+  text-align:center; flex:1; transition:color .2s;
+}
+.sim-progress-labels span.on{ color:var(--or); font-weight:700; }
+
+/* ---------- Bandeau de sous-titres (mode ?captions=1) ---------- */
+.caption-bar{
+  margin:0 26px; padding:10px 14px; background:rgba(255,107,26,.1); border:1px solid rgba(255,107,26,.45);
+  border-radius:5px; color:var(--ink); font-size:14px; line-height:1.4; display:flex; gap:8px; align-items:flex-start;
+}
+.caption-bar::before{ content:"CC"; font-family:var(--f-mono); font-size:10px; font-weight:700; color:var(--or);
+  border:1px solid var(--or); border-radius:3px; padding:1px 4px; flex:none; margin-top:2px; }
+.caption-bar.cc-fixed{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:60;
+  width:min(760px, 92vw); margin:0; background:rgba(6,13,20,.96); box-shadow:var(--shadow);
+}
+
+/* ---------- Tableau d'analyse (facturé / prouvé / écart) ---------- */
+.analyse-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+.analyse-table th,.analyse-table td{ padding:8px 10px; border-bottom:1px solid var(--line-soft); text-align:right; }
+.analyse-table th:first-child,.analyse-table td:first-child{ text-align:left; color:var(--dim); }
+.analyse-table th{ font-family:var(--f-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); }
+.analyse-table td.gap{ color:var(--or-hot); font-weight:700; }
+.analyse-table tr.total td{ font-weight:700; color:var(--ink); border-top:1px solid var(--line); border-bottom:none; }
+.clausebox{
+  margin-top:10px; border-left:3px solid var(--cy-dim); background:var(--panel2); border-radius:0 4px 4px 0;
+  padding:9px 12px; font-size:12.5px; color:var(--dim); font-style:italic;
+}
+.clausebox strong{ font-style:normal; color:var(--cy); }
+
+/* ---------- Score avec avertissement ---------- */
+.score.warn{ border-color:rgba(245,185,66,.5); background:rgba(245,185,66,.07); }
+.score.warn .sn{ color:var(--warn); }
+.warn-note{
+  margin-top:8px; font-size:12.5px; color:var(--warn); border-left:3px solid var(--warn);
+  padding:6px 10px; background:rgba(245,185,66,.06); border-radius:0 4px 4px 0;
+}
+
 /* ---------- Bande CTA mi-page ---------- */
 .ctaband{
   border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
@@ -588,6 +645,10 @@ html.js .rv.in{ opacity:1; transform:none; }
   .foot-cols{ grid-template-columns:1fr; gap:26px; }
   .ctaband .wrap{ justify-content:center; text-align:center; }
   .btn-xl{ padding:17px 26px; font-size:16.5px; }
+  .sim-progress-labels span{ font-size:8.5px; }
+  .case-tab{ flex:1 1 auto; text-align:center; padding:9px 8px; }
+  .analyse-table{ font-size:12px; }
+  .analyse-table th,.analyse-table td{ padding:6px 6px; }
 }
 </style>
 </head>
@@ -767,82 +828,187 @@ html.js .rv.in{ opacity:1; transform:none; }
     <div class="section-head rv">
       <p class="eyebrow">Démo interactive</p>
       <h2>Prenez le siège du patron. Rien ne part sans votre <span class="hl">GO</span>.</h2>
-      <p class="lede">Une simulation en 60 secondes : un courriel fictif arrive, les agents font leur travail — et s'arrêtent devant vous. À vous de décider.</p>
+      <p class="lede">Deux cas, données fictives (exemple) : un courriel de sous-traitant contesté, et un décompte de chantier. Les agents font le travail — et s'arrêtent devant vous. À vous de décider.</p>
+    </div>
+    <div class="case-tabs rv" role="tablist" aria-label="Choisir un cas de démonstration">
+      <button class="case-tab" id="caseTabSt" role="tab" aria-selected="true" aria-controls="casePanelSt">Cas 1 — Courriel sous-traitant</button>
+      <button class="case-tab" id="caseTabDdp" role="tab" aria-selected="false" aria-controls="casePanelDdp">Cas 2 — Décompte de chantier (DDP)</button>
     </div>
     <div class="sim-frame rv">
       <div class="sim-topbar">
         <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="sim-badge">Simulation — données fictives</span>
+        <span class="sim-badge">Simulation — données fictives (exemple)</span>
         <span>Aucun système réel connecté · démonstration du mécanisme seulement</span>
       </div>
-      <div class="sim-cols">
-        <div class="sim-mail">
-          <div class="mailcard">
-            <div class="mailhead">
-              <div class="row"><span class="k">De</span><span class="v">Fournisseur Exemple inc. (fictif)</span></div>
-              <div class="row"><span class="k">Objet</span><span class="v">Soumission révisée — lot portes et cadres</span></div>
-            </div>
-            <div class="mailbody">
-              <p>« Bonjour, suite aux modifications demandées, veuillez trouver notre soumission révisée au montant de 9 800 $. Merci de confirmer pour lancer la production. »</p>
-              <p class="mono" style="font-size:11.5px">PJ : soumission-revisee.pdf (fictive)</p>
-            </div>
-          </div>
-          <button class="btn btn-go sim-run" id="simRun">Lancer le traitement</button>
-          <div class="sim-legend">
-            <div class="lh">Ce que vous voyez</div>
-            <p>Un courriel de fournisseur arrive chez un entrepreneur général de 5 à 100 employés. Les agents le traitent de bout en bout — puis s'arrêtent devant vous avant tout envoi.</p>
-            <ol>
-              <li><strong>Ils comprennent</strong> — classification et sources reliées</li>
-              <li><strong>Ils vérifient</strong> — écart chiffré, juges indépendants</li>
-              <li><strong>Vous décidez</strong> — le gate humain, jamais contourné</li>
-            </ol>
-          </div>
-        </div>
-        <div class="sim-pipe" id="simPipe" aria-live="polite">
-          <div class="ps" id="ps1" hidden>
-            <div class="ph"><span>1 · Classification</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb tagrow">
-              <span class="tag-chip">Soumission fournisseur</span>
-              <span class="tag-chip">Chantier A (fictif)</span>
-              <span class="tag-chip">Réponse attendue</span>
-            </div>
-          </div>
-          <div class="ps" id="ps2" hidden>
-            <div class="ph"><span>2 · Contexte récupéré — sources citées</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb"><p>3 sources reliées : le fil de courriels, le bon de commande BC-0000 (fictif, 9 200 $) et le plan rev.04. <strong>Écart détecté : +600 $ vs bon de commande.</strong></p></div>
-          </div>
-          <div class="ps" id="ps3" hidden>
-            <div class="ph"><span>3 · Brouillon préparé</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb draftbox">« Bonjour, nous accusons réception de votre soumission révisée. Avant confirmation, merci de justifier l'écart de 600 $ par rapport au bon de commande BC-0000… »</div>
-          </div>
-          <div class="ps" id="ps4" hidden>
-            <div class="ph"><span>4 · Validation croisée — modèles indépendants (simulée)</span><span class="ok" aria-hidden="true">✓</span></div>
-            <div class="pb scorerow">
-              <div class="score"><div class="sn">9,6</div><div class="sl">Juge — famille A</div></div>
-              <div class="score"><div class="sn">9,8</div><div class="sl">Juge — famille B</div></div>
-              <div class="score"><div class="sn">9,7</div><div class="sl">Juge — famille C</div></div>
-            </div>
-          </div>
-          <div class="ps gatebox" id="ps5" hidden>
-            <div class="ph"><span>5 · Gate humain — action externe détectée</span></div>
-            <div class="pb">
-              <p>Ce brouillon partirait chez un fournisseur : c'est une action externe. La machine s'arrête ici. À vous.</p>
-              <div class="gate-actions">
-                <button class="btn btn-go" id="simGo">GO — approuver l'envoi</button>
-                <button class="btn btn-line" id="simNogo">NO-GO — retenir</button>
+      <div class="sim-progress" aria-hidden="true">
+        <div class="sim-progress-track"><div class="sim-progress-fill" id="simProgressFill"></div></div>
+        <div class="sim-progress-labels" id="simProgressLabels"></div>
+      </div>
+      <div class="caption-bar" id="captionBar" hidden></div>
+
+      <!-- ===== CAS 1 — Courriel sous-traitant contesté ===== -->
+      <div class="case-panel" id="casePanelSt">
+        <div class="sim-cols">
+          <div class="sim-mail">
+            <div class="mailcard">
+              <div class="mailhead">
+                <div class="row"><span class="k">De</span><span class="v">Plomberie Nord inc. (exemple)</span></div>
+                <div class="row"><span class="k">Objet</span><span class="v">Facture #4471 — raccordement sous-sol, École des Érables (exemple)</span></div>
+              </div>
+              <div class="mailbody">
+                <p>« Bonjour, ci-joint notre facture de 18 000 $ pour le raccordement plomberie au sous-sol, incluant un extra de 4 000 $ pour conditions de sol imprévues. Merci de confirmer le paiement rapidement. »</p>
+                <p class="mono" style="font-size:11.5px">PJ : facture-4471-18000.pdf (exemple)</p>
               </div>
             </div>
+            <button class="btn btn-go sim-run" id="simRunSt">Lancer le traitement</button>
+            <div class="sim-legend">
+              <div class="lh">Ce que vous voyez</div>
+              <p>Un courriel de sous-traitant contesté arrive chez un entrepreneur général de 5 à 100 employés. Les agents le traitent de bout en bout — puis s'arrêtent devant vous avant tout envoi.</p>
+              <ol>
+                <li><strong>Ils lisent</strong> — le fil, le contrat, les directives de chantier</li>
+                <li><strong>Ils analysent</strong> — facturé vs prouvé, clause citée</li>
+                <li><strong>Ils rédigent</strong> — un brouillon dans votre voix</li>
+                <li><strong>Ils vérifient</strong> — 3 juges indépendants, avertissements expliqués</li>
+                <li><strong>Vous décidez</strong> — le gate humain, jamais contourné</li>
+              </ol>
+            </div>
           </div>
-          <div class="sim-result go" id="simResGo" tabindex="-1" hidden>
-            <span>✓ Approuvé par vous. Dans le vrai système : l'envoi s'exécute, puis tout est journalisé — sources, versions, validations, votre approbation.</span>
-            <span class="mono">JRNL · approuvé:humain · sources:3 · validation:PASS · (simulation)</span>
+          <div class="sim-pipe" id="simPipeSt" aria-live="polite">
+            <div class="ps" id="stPs1" hidden data-caption="L'agent lit le fil de courriel, retrouve le contrat et la directive de chantier.">
+              <div class="ph"><span>1 · Lecture — fil, contrat, directives</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb tagrow">
+                <span class="tag-chip">Fil courriel — 6 messages</span>
+                <span class="tag-chip">Contrat lot plomberie, art. 4.2</span>
+                <span class="tag-chip">Directives de chantier — aucune correspondance</span>
+              </div>
+            </div>
+            <div class="ps" id="stPs2" hidden data-caption="Il compare facturé et prouvé, poste par poste, et cite la clause exacte du contrat.">
+              <div class="ph"><span>2 · Analyse — facturé vs prouvé</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <table class="analyse-table">
+                  <thead><tr><th>Poste</th><th>Facturé</th><th>Prouvé</th><th>Écart</th></tr></thead>
+                  <tbody>
+                    <tr><td>Raccordement (forfait)</td><td>14 000 $</td><td>14 000 $</td><td>0 $</td></tr>
+                    <tr><td>Extra « conditions de sol »</td><td>4 000 $</td><td>0 $</td><td class="gap">+4 000 $</td></tr>
+                    <tr class="total"><td>Total</td><td>18 000 $</td><td>14 000 $</td><td class="gap">+4 000 $</td></tr>
+                  </tbody>
+                </table>
+                <div class="clausebox"><strong>Contrat, art. 4.2 :</strong> « Tout extra doit faire l'objet d'une directive de chantier écrite avant exécution. » Aucune directive trouvée pour ce poste.</div>
+              </div>
+            </div>
+            <div class="ps" id="stPs3" hidden data-caption="Il rédige un brouillon de réponse dans le ton du dirigeant — rien n'est envoyé.">
+              <div class="ph"><span>3 · Brouillon préparé — dans votre voix</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb draftbox">« Je confirme la réception de la facture de 18 000 $. Le raccordement au forfait (14 000 $) est conforme et sera traité normalement. L'extra de 4 000 $ n'est pas couvert : notre contrat (art. 4.2) exige une directive écrite avant exécution, et nous n'en avons aucune trace. Faites-nous parvenir cette directive si elle existe, sinon reprenez l'extra en soumission avant exécution. »</div>
+            </div>
+            <div class="ps" id="stPs4" hidden data-caption="Trois modèles indépendants valident le brouillon; un avertissement est expliqué, pas caché.">
+              <div class="ph"><span>4 · Validation croisée — 3 juges indépendants</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <div class="scorerow">
+                  <div class="score"><div class="sn">9,6</div><div class="sl">Juge — famille A</div></div>
+                  <div class="score warn"><div class="sn">8,2</div><div class="sl">Juge — famille B · avertissement</div></div>
+                  <div class="score"><div class="sn">9,4</div><div class="sl">Juge — famille C</div></div>
+                </div>
+                <div class="warn-note">⚠ Avertissement (famille B) : le brouillon ne propose pas de date limite de réponse au sous-traitant — à ajouter avant envoi.</div>
+              </div>
+            </div>
+            <div class="ps gatebox" id="stPs5" hidden data-caption="Le dirigeant décide : Approuver ou Retenir. La décision est journalisée.">
+              <div class="ph"><span>5 · Gate humain — action externe détectée</span></div>
+              <div class="pb">
+                <p>Ce brouillon partirait chez un sous-traitant : c'est une action externe. La machine s'arrête ici. À vous.</p>
+                <div class="gate-actions">
+                  <button class="btn btn-go" id="simGoSt">GO — approuver l'envoi</button>
+                  <button class="btn btn-line" id="simNogoSt">NO-GO — retenir</button>
+                </div>
+              </div>
+            </div>
+            <div class="sim-result go" id="simResGoSt" tabindex="-1" hidden>
+              <span>✓ Approuvé par vous. Dans le vrai système : l'envoi s'exécute, puis tout est journalisé — sources, versions, validations, votre approbation.</span>
+              <span class="mono">JRNL · approuvé:humain · sources:3 · validation:9,6/8,2/9,4 · avertissement:consigné · (simulation)</span>
+            </div>
+            <div class="sim-result nogo" id="simResNogoSt" tabindex="-1" hidden>
+              <span>◼ Retenu. Rien n'est parti. Dans le vrai système : le brouillon retourne en révision avec votre commentaire — et le refus est journalisé aussi.</span>
+              <span class="mono">JRNL · retenu:humain · envoi:aucun · (simulation)</span>
+            </div>
+            <button class="btn btn-line btn-sm sim-replay" id="simReplaySt" hidden>Rejouer la simulation</button>
+            <p class="sim-cta" id="simCtaSt" hidden>Vous voulez voir la vraie machine, sur de vraies opérations? <a href="mailto:sarah@ino-vita.com?subject=D%C3%A9mo%20%E2%80%94%20Ino-Vita%20AI">Réserver un appel de 30&nbsp;min →</a></p>
           </div>
-          <div class="sim-result nogo" id="simResNogo" tabindex="-1" hidden>
-            <span>◼ Retenu. Rien n'est parti. Dans le vrai système : le brouillon retourne en révision avec votre commentaire — et le refus est journalisé aussi.</span>
-            <span class="mono">JRNL · retenu:humain · envoi:aucun · (simulation)</span>
+        </div>
+      </div>
+
+      <!-- ===== CAS 2 — Décompte de chantier (DDP) ===== -->
+      <div class="case-panel" id="casePanelDdp" hidden>
+        <div class="sim-cols">
+          <div class="sim-mail">
+            <div class="mailcard">
+              <div class="mailhead">
+                <div class="row"><span class="k">De</span><span class="v">Structure Beauport inc. (exemple)</span></div>
+                <div class="row"><span class="k">Objet</span><span class="v">Décompte progressif #7 — École des Érables (exemple)</span></div>
+              </div>
+              <div class="mailbody">
+                <p>« Bonjour, voici notre décompte #7 : fondations 100 %, charpente acier 85 %, dalles d'étage 40 %. Photos et rapport de surveillance joints. »</p>
+                <p class="mono" style="font-size:11.5px">PJ : ddp-7-avancement.pdf + 12 photos (exemple)</p>
+              </div>
+            </div>
+            <button class="btn btn-go sim-run" id="simRunDdp">Lancer le traitement</button>
+            <div class="sim-legend">
+              <div class="lh">Ce que vous voyez</div>
+              <p>Un décompte d'avancement (DDP) arrive : facturé par poste vs ce que les photos et le rapport de surveillance prouvent réellement.</p>
+              <ol>
+                <li><strong>Ils lisent</strong> — décompte, photos, rapport de surveillance</li>
+                <li><strong>Ils analysent</strong> — % facturé vs % prouvé, par poste</li>
+                <li><strong>Vous décidez</strong> — approuver ou retenir l'écart</li>
+              </ol>
+            </div>
           </div>
-          <button class="btn btn-line btn-sm sim-replay" id="simReplay" hidden>Rejouer la simulation</button>
-          <p class="sim-cta" id="simCta" hidden>Vous voulez voir la vraie machine, sur de vraies opérations? <a href="mailto:sarah@ino-vita.com?subject=D%C3%A9mo%20%E2%80%94%20Ino-Vita%20AI">Réserver un appel de 30 min →</a></p>
+          <div class="sim-pipe" id="simPipeDdp" aria-live="polite">
+            <div class="ps" id="ddpPs1" hidden data-caption="L'agent lit le décompte, les photos de chantier et le rapport de surveillance.">
+              <div class="ph"><span>1 · Lecture — décompte, photos, surveillance</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb tagrow">
+                <span class="tag-chip">Décompte progressif #7 (exemple)</span>
+                <span class="tag-chip">12 photos datées</span>
+                <span class="tag-chip">Rapport de surveillance — semaine 34</span>
+              </div>
+            </div>
+            <div class="ps" id="ddpPs2" hidden data-caption="Il calcule l'écart entre le pourcentage facturé et ce que les preuves montrent, poste par poste.">
+              <div class="ph"><span>2 · Analyse — % facturé vs % prouvé</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb">
+                <table class="analyse-table">
+                  <thead><tr><th>Poste</th><th>Facturé</th><th>Prouvé (photos/rapport)</th><th>Écart</th></tr></thead>
+                  <tbody>
+                    <tr><td>Fondations</td><td>100 %</td><td>100 %</td><td>0 pt</td></tr>
+                    <tr><td>Charpente acier</td><td>85 %</td><td>60 %</td><td class="gap">−25 pts</td></tr>
+                    <tr><td>Dalles d'étage</td><td>40 %</td><td>40 %</td><td>0 pt</td></tr>
+                    <tr class="total"><td>Total pondéré</td><td>78 %</td><td>68 %</td><td class="gap">−10 pts</td></tr>
+                  </tbody>
+                </table>
+                <div class="clausebox"><strong>Preuve :</strong> les photos datées montrent l'aile est de la charpente non posée; le rapport de surveillance (semaine 34) ne confirme que 60 % d'avancement sur ce poste.</div>
+              </div>
+            </div>
+            <div class="ps" id="ddpPs3" hidden data-caption="Il rédige une note interne recommandant une retenue partielle sur le poste en écart.">
+              <div class="ph"><span>3 · Brouillon préparé — note interne</span><span class="ok" aria-hidden="true">✓</span></div>
+              <div class="pb draftbox">« Charpente acier facturée à 85 % mais les photos ne montrent que 60 % posé (aile est incomplète). Je recommande de retenir 25 points de pourcentage sur ce poste jusqu'à confirmation par le surintendant. »</div>
+            </div>
+            <div class="ps gatebox" id="ddpPs4" hidden data-caption="Le dirigeant décide : approuver la retenue proposée ou payer au complet.">
+              <div class="ph"><span>4 · Gate humain — décompte à certifier</span></div>
+              <div class="pb">
+                <p>Certifier ce décompte est une décision financière : la machine s'arrête ici. À vous.</p>
+                <div class="gate-actions">
+                  <button class="btn btn-go" id="simGoDdp">GO — approuver la retenue de 25 pts</button>
+                  <button class="btn btn-line" id="simNogoDdp">NO-GO — payer au complet</button>
+                </div>
+              </div>
+            </div>
+            <div class="sim-result go" id="simResGoDdp" tabindex="-1" hidden>
+              <span>✓ Retenue de 25 pts approuvée par vous sur la charpente. Dans le vrai système : le décompte ajusté est journalisé — photos, rapport, votre décision.</span>
+              <span class="mono">JRNL · approuvé:humain · poste:charpente · retenue:25pts · (simulation)</span>
+            </div>
+            <div class="sim-result nogo" id="simResNogoDdp" tabindex="-1" hidden>
+              <span>◼ Payé au complet par vous, malgré l'écart signalé. Dans le vrai système : votre décision et la réserve sont journalisées ensemble.</span>
+              <span class="mono">JRNL · décision:humain · réserve:consignée · (simulation)</span>
+            </div>
+            <button class="btn btn-line btn-sm sim-replay" id="simReplayDdp" hidden>Rejouer la simulation</button>
+            <p class="sim-cta" id="simCtaDdp" hidden>Vous voulez voir la vraie machine, sur de vraies opérations? <a href="mailto:sarah@ino-vita.com?subject=D%C3%A9mo%20%E2%80%94%20Ino-Vita%20AI">Réserver un appel de 30&nbsp;min →</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -1181,47 +1347,131 @@ var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   els.forEach(function(el){ io.observe(el); });
 })();
 
-/* ---------- Simulateur GO/NO-GO ---------- */
+/* ---------- Simulateur GO/NO-GO — 2 cas, sous-titres, barre de progression ---------- */
 (function(){
-  var run = document.getElementById('simRun');
-  if(!run) return;
-  var steps = ['ps1','ps2','ps3','ps4','ps5'].map(function(id){ return document.getElementById(id); });
-  var go = document.getElementById('simGo'), nogo = document.getElementById('simNogo');
-  var resGo = document.getElementById('simResGo'), resNogo = document.getElementById('simResNogo');
-  var replay = document.getElementById('simReplay');
-  var cta = document.getElementById('simCta');
-  var timers = [];
-  function reset(){
-    timers.forEach(clearTimeout); timers = [];
-    steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
-    resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
-    if(cta) cta.hidden = true;
-    go.disabled = false; nogo.disabled = false;
-    run.disabled = false;
-  }
-  run.addEventListener('click', function(){
-    reset();
-    run.disabled = true;
-    var delay = REDUCED ? 0 : 750;
-    steps.forEach(function(s, i){
-      timers.push(setTimeout(function(){
-        s.hidden = false;
-        if(!REDUCED) s.classList.add('appear');
-        if(i === steps.length - 1) s.scrollIntoView({ block:'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
-      }, delay * (i + 1)));
+  var CAPTIONS = /(?:^|[?&])captions=1(?:&|$)/.test(location.search);
+  var captionBar = document.getElementById('captionBar');
+  var progressFill = document.getElementById('simProgressFill');
+  var progressLabels = document.getElementById('simProgressLabels');
+  if(!progressFill || !progressLabels) return;
+
+  var cases = {
+    st: {
+      stepIds: ['stPs1','stPs2','stPs3','stPs4','stPs5'],
+      labels: ['1 Lecture','2 Analyse','3 Brouillon','4 Validation','5 Décision'],
+      runId:'simRunSt', goId:'simGoSt', nogoId:'simNogoSt',
+      resGoId:'simResGoSt', resNogoId:'simResNogoSt', replayId:'simReplaySt', ctaId:'simCtaSt'
+    },
+    ddp: {
+      stepIds: ['ddpPs1','ddpPs2','ddpPs3','ddpPs4'],
+      labels: ['1 Lecture','2 Analyse','3 Note','4 Décision'],
+      runId:'simRunDdp', goId:'simGoDdp', nogoId:'simNogoDdp',
+      resGoId:'simResGoDdp', resNogoId:'simResNogoDdp', replayId:'simReplayDdp', ctaId:'simCtaDdp'
+    }
+  };
+
+  var active = 'st';
+  var controllers = {};
+
+  function buildProgressLabels(labels){
+    progressLabels.innerHTML = '';
+    labels.forEach(function(t){
+      var span = document.createElement('span');
+      span.textContent = t;
+      progressLabels.appendChild(span);
     });
-  });
-  function decide(el){
-    resGo.hidden = true; resNogo.hidden = true;
-    el.hidden = false; replay.hidden = false;
-    if(cta) cta.hidden = false;
-    go.disabled = true; nogo.disabled = true;
-    el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
-    try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
   }
-  go.addEventListener('click', function(){ decide(resGo); });
-  nogo.addEventListener('click', function(){ decide(resNogo); });
-  replay.addEventListener('click', function(){ reset(); run.click(); });
+  function setProgress(n, total){
+    var pct = total ? Math.round((n / total) * 100) : 0;
+    progressFill.style.width = pct + '%';
+    if(REDUCED) progressFill.classList.add('reduced');
+    var spans = progressLabels.querySelectorAll('span');
+    spans.forEach(function(s, i){ s.classList.toggle('on', i < n); });
+  }
+  function showCaption(text){
+    if(!CAPTIONS || !captionBar) return;
+    captionBar.classList.add('cc-fixed');
+    if(!text){ captionBar.hidden = true; return; }
+    captionBar.textContent = text;
+    captionBar.hidden = false;
+  }
+
+  function makeController(key){
+    var cfg = cases[key];
+    var steps = cfg.stepIds.map(function(id){ return document.getElementById(id); });
+    var run = document.getElementById(cfg.runId);
+    if(!run) return null;
+    var go = document.getElementById(cfg.goId), nogo = document.getElementById(cfg.nogoId);
+    var resGo = document.getElementById(cfg.resGoId), resNogo = document.getElementById(cfg.resNogoId);
+    var replay = document.getElementById(cfg.replayId);
+    var cta = document.getElementById(cfg.ctaId);
+    var timers = [];
+
+    function reset(){
+      timers.forEach(clearTimeout); timers = [];
+      steps.forEach(function(s){ s.hidden = true; s.classList.remove('appear'); });
+      resGo.hidden = true; resNogo.hidden = true; replay.hidden = true;
+      if(cta) cta.hidden = true;
+      go.disabled = false; nogo.disabled = false;
+      run.disabled = false;
+      if(active === key){ setProgress(0, steps.length); showCaption(null); }
+    }
+    function launch(){
+      reset();
+      run.disabled = true;
+      var delay = REDUCED ? 0 : (CAPTIONS ? 5000 : 900);
+      steps.forEach(function(s, i){
+        timers.push(setTimeout(function(){
+          if(active !== key) return;
+          s.hidden = false;
+          if(!REDUCED) s.classList.add('appear');
+          setProgress(i + 1, steps.length);
+          showCaption(s.getAttribute('data-caption'));
+          if(CAPTIONS || i === steps.length - 1) s.scrollIntoView({ block:'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
+        }, delay * (i + 1)));
+      });
+    }
+    function decide(el, resultCaption){
+      resGo.hidden = true; resNogo.hidden = true;
+      el.hidden = false; replay.hidden = false;
+      if(cta) cta.hidden = false;
+      go.disabled = true; nogo.disabled = true;
+      if(active === key) showCaption(resultCaption);
+      el.scrollIntoView({ block:'center', behavior: REDUCED ? 'auto' : 'smooth' });
+      try{ el.focus({ preventScroll:true }); }catch(e){ if(el.focus) el.focus(); }
+    }
+    run.addEventListener('click', launch);
+    go.addEventListener('click', function(){ decide(resGo, 'Décision : Approuver. Elle est journalisée — sources, validations, votre nom.'); });
+    nogo.addEventListener('click', function(){ decide(resNogo, 'Décision : Retenir. Rien n’est parti — la décision est journalisée aussi.'); });
+    replay.addEventListener('click', function(){ reset(); run.click(); });
+    return { reset: reset, labels: cfg.labels, total: steps.length };
+  }
+
+  Object.keys(cases).forEach(function(key){
+    var c = makeController(key);
+    if(c) controllers[key] = c;
+  });
+
+  var tabSt = document.getElementById('caseTabSt'), tabDdp = document.getElementById('caseTabDdp');
+  var panelSt = document.getElementById('casePanelSt'), panelDdp = document.getElementById('casePanelDdp');
+  function switchCase(key){
+    if(active === key || !panelSt || !panelDdp) return;
+    if(controllers[active]) controllers[active].reset();
+    active = key;
+    var toSt = key === 'st';
+    panelSt.hidden = !toSt; panelDdp.hidden = toSt;
+    tabSt.setAttribute('aria-selected', toSt ? 'true' : 'false');
+    tabDdp.setAttribute('aria-selected', toSt ? 'false' : 'true');
+    if(controllers[key]){
+      buildProgressLabels(controllers[key].labels);
+      setProgress(0, controllers[key].total);
+    }
+    showCaption(null);
+  }
+  if(tabSt) tabSt.addEventListener('click', function(){ switchCase('st'); });
+  if(tabDdp) tabDdp.addEventListener('click', function(){ switchCase('ddp'); });
+
+  if(controllers.st){ buildProgressLabels(controllers.st.labels); setProgress(0, controllers.st.total); }
 })();
 
 /* ---------- Hero : la charpente est un réseau (canvas) ---------- */
