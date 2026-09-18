@@ -109,7 +109,9 @@ a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
 }
 .masthead .row,.foot .row{
   display:flex; align-items:baseline; justify-content:space-between; gap:24px;
-  padding:22px 0;
+  /* 2026-09-17 : le raccourci mettait la gouttiere laterale a zero et collait le
+     logo au bord de l'ecran sur telephone, alors que le corps gardait ses 28 px. */
+  padding:22px 28px;
 }
 .mark{ font-weight:500; letter-spacing:-.01em; font-size:17px; }
 .mark .ai{ color:var(--accent); }
@@ -207,6 +209,7 @@ main.doc th{ font-weight:500; color:var(--ink-70); }
 @media (max-width:560px){
   body{ font-size:16.5px; }
   .wrap{ padding:0 20px; }
+  .masthead .row,.foot .row{ padding:22px 20px; }
   section{ padding:64px 0; }
   .hero{ padding:72px 0 64px; }
   .fig{ font-size:15px; }
