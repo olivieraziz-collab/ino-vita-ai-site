@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Les pages legales sont en noindex (versions preliminaires) et ne figurent pas ici. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://ino-vita.ai/</loc><lastmod>2026-09-10</lastmod></url>
-  <url><loc>https://ino-vita.ai/en/</loc><lastmod>2026-09-17</lastmod></url>
-  <url><loc>https://ino-vita.ai/demo/</loc><lastmod>2026-09-10</lastmod></url>
-  <url><loc>https://ino-vita.ai/en/demo/</loc><lastmod>2026-09-10</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://ino-vita.ai/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/"/>
+  </url>
+  <url><loc>https://ino-vita.ai/en/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/"/>
+  </url>
+  <url><loc>https://ino-vita.ai/mentions-legales.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/mentions-legales.html"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/legal.html"/>
+  </url>
+  <url><loc>https://ino-vita.ai/en/legal.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/mentions-legales.html"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/legal.html"/>
+  </url>
+  <url><loc>https://ino-vita.ai/politique-confidentialite.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/politique-confidentialite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/privacy.html"/>
+  </url>
+  <url><loc>https://ino-vita.ai/en/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/politique-confidentialite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/privacy.html"/>
+  </url>
 </urlset>

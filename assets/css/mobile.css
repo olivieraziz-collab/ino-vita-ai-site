@@ -1,0 +1,136 @@
+/* Retouches communes au téléphone; charger après base.css et brand.css. */
+@media screen and (max-width: 480px) {
+  .container-default,
+  .site-nav {
+    padding-inline: 16px;
+  }
+
+  .skip-link {
+    left: 16px;
+    right: 16px;
+    max-width: calc(100% - 32px);
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .header-nav-link,
+  .language-link,
+  .menu-toggle,
+  .header-action.btn-primary,
+  .header-action .btn-primary,
+  .eyebrow,
+  .product-card,
+  .product-card .product-card-title,
+  .decision-option,
+  .hero-product figcaption,
+  .large-scene figcaption,
+  .gallery-disclaimer,
+  .section-note,
+  .contact-actions .btn-primary,
+  .contact-mail,
+  .footer-grid a:not(.brand),
+  .footer-bottom p,
+  .legal-toc a {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .section-divider-wrapper > .width-100 {
+    flex: 1 1 0%;
+    min-width: 0;
+    width: auto;
+  }
+
+  .divider.section-divider-line {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .hero-demo-link,
+  .header-nav-link {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+
+  .btn-primary > span:not(.button-arrow),
+  .btn-secondary > span:not(.button-arrow) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .site-nav .header-action {
+    align-self: stretch;
+    max-width: 100%;
+  }
+
+  .site-nav .header-action .btn-primary {
+    width: 100%;
+  }
+
+  .hero-demo-link,
+  .service-text-link {
+    flex-wrap: wrap;
+  }
+
+  /* Ces deux étiquettes ne sont pas des commandes interactives. */
+  .decision-option,
+  .decision-option:first-child {
+    height: auto;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .legal-block a {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-section.final-contact {
+    padding-block: 16px;
+  }
+
+  .contact-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .contact-layout h2,
+  .contact-layout .display-3 {
+    grid-column: 1;
+    grid-row: auto;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-column: 1;
+    grid-row: auto;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-actions .btn-primary {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .contact-mail {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
