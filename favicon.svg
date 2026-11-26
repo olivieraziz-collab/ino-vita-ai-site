@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="13" fill="#060D14"/>
-  <g fill="none" stroke="#58D8FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 13 L11 51 H53 Z"/>
-    <path d="M32 13 V51 M21.5 32 L32 51 M42.5 32 L32 51"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Ino-Vita AI — symbole">
+  <rect width="64" height="64" fill="#121212"/>
+  <g transform="translate(9 9) scale(0.46)">
+    <path fill="#F2EDE3" d="M0 0 H100 V88 H78 V22 H22 V88 H0 Z"/>
+    <path fill="#E1531C" d="M29 48 L50 74 L71 48 L71 74 L50 100 L29 74 Z"/>
   </g>
-  <circle cx="11" cy="51" r="4.4" fill="#E9F2F9"/>
-  <circle cx="53" cy="51" r="4.4" fill="#E9F2F9"/>
-  <circle cx="32" cy="51" r="4.4" fill="#E9F2F9"/>
-  <circle cx="21.5" cy="32" r="3.6" fill="#58D8FF"/>
-  <circle cx="42.5" cy="32" r="3.6" fill="#58D8FF"/>
-  <circle cx="32" cy="13" r="6.2" fill="#FF6B1A"/>
 </svg>

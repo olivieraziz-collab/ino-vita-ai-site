@@ -24,4 +24,12 @@
     <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/politique-confidentialite.html"/>
     <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/privacy.html"/>
   </url>
+  <url><loc>https://ino-vita.ai/demo/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/demo/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/demo/"/>
+  </url>
+  <url><loc>https://ino-vita.ai/en/demo/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://ino-vita.ai/demo/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://ino-vita.ai/en/demo/"/>
+  </url>
 </urlset>
